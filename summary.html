@@ -1,0 +1,519 @@
+﻿<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng kết & Đánh giá | Nguyễn Thanh Tuấn</title>
+    <meta name="description" content="Tổng kết hành trình học tập môn Lập trình nâng cao và tự đánh giá kết quả đạt được - Nguyễn Thanh Tuấn, MSSV 25021993, VNU-UET">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .summary-hero {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .summary-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(ellipse at center, rgba(14,165,233,0.08) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+        }
+        .hero-avatar-wrap {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            border: 3px solid var(--accent-primary);
+            box-shadow: 0 0 30px var(--accent-glow);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-avatar-wrap img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-name {
+            font-size: 2rem; font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative; z-index: 1;
+        }
+        .hero-info { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; position: relative; z-index: 1; }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            position: relative; z-index: 1;
+        }
+        .stat-box {
+            background: rgba(14,165,233,0.08);
+            border: 1px solid rgba(14,165,233,0.2);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 2rem; font-weight: 900;
+            font-family: var(--font-body);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.05em; }
+        .project-card-summary {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            padding: 1.25rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.9rem;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        .project-card-summary:hover {
+            border-color: var(--accent-primary);
+            transform: translateX(6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .project-card-summary:hover .pcs-title { color: var(--accent-primary); }
+        .pcs-num {
+            width: 48px; height: 48px; flex-shrink: 0;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem;
+        }
+        .pcs-body { flex: 1; }
+        .pcs-badge { font-size: 0.7rem; font-weight: 600; color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.05em; }
+        .pcs-title { color: var(--text-primary); font-size: 1rem; font-weight: 700; margin: 0.2rem 0 0.35rem; transition: color 0.2s; }
+        .pcs-desc { font-size: 0.83rem; color: var(--text-secondary); }
+        .pcs-skills { display: flex; gap: 0.35rem; flex-wrap: wrap; margin-top: 0.6rem; }
+        .pcs-skill { background: var(--bg-secondary); border: 1px solid var(--card-border); color: var(--text-muted); font-size: 0.7rem; padding: 0.15rem 0.5rem; border-radius: 9999px; }
+        .skill-radar-wrap {
+            display: flex;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .skill-bar-item {
+            margin-bottom: 1rem;
+        }
+        .skill-bar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.35rem;
+        }
+        .skill-bar-label { font-size: 0.85rem; color: var(--text-primary); font-weight: 500; }
+        .skill-bar-score { font-size: 0.85rem; color: var(--accent-primary); font-weight: 700; }
+        .skill-bar-track {
+            background: var(--bg-secondary);
+            border-radius: 9999px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .skill-bar-fill {
+            height: 100%;
+            border-radius: 9999px;
+            background: var(--accent-gradient);
+            animation: growBar 1.5s ease-out forwards;
+            transform-origin: left;
+        }
+        @keyframes growBar {
+            from { width: 0; }
+        }
+        .reflection-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        .reflection-icon { font-size: 2rem; flex-shrink: 0; }
+        .reflection-body h4 { color: var(--text-primary); margin-bottom: 0.5rem; }
+        .reflection-body p { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.6; }
+        .self-eval-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 80px;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .self-eval-row:last-child { border-bottom: none; }
+        .eval-criterion { font-size: 0.87rem; color: var(--text-primary); font-weight: 500; }
+        .eval-note { font-size: 0.83rem; color: var(--text-secondary); }
+        .eval-grade {
+            font-size: 1.1rem; font-weight: 800;
+            text-align: center;
+            font-family: var(--font-body);
+        }
+        .grade-a { color: #34d399; }
+        .grade-b { color: #38bdf8; }
+        .grade-c { color: #fbbf24; }
+        @media (max-width: 900px) {
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+            .self-eval-row { grid-template-columns: 1fr; gap: 0.25rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <h3 class="mobile-title">Tuấn's Portfolio</h3>
+        <button class="menu-hamburger" id="hamburger-btn" aria-label="Mở menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn" class="sidebar-avatar">
+            <h3 class="sidebar-title">Nguyễn Thanh Tuấn</h3>
+            <span class="sidebar-subtitle">Sinh viên CNTT</span>
+            <span style="font-size:0.75rem;color:var(--accent-primary);margin-top:0.25rem;font-weight:bold;font-family:var(--font-heading);">MSSV: 25021993</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Giới thiệu bản thân
+            </a>
+            <a href="project1.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 1: Quản lý tệp &amp; thư mục
+            </a>
+            <a href="project2.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 2: Tìm kiếm học thuật
+            </a>
+            <a href="project3.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 3: Viết Prompt hiệu quả
+            </a>
+            <a href="project4.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 4: Hợp tác trực tuyến
+            </a>
+            <a href="project5.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 5: Sáng tạo nội dung số
+            </a>
+            <a href="project6.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 6: AI có trách nhiệm
+            </a>
+            <a href="summary.html" class="menu-item active">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Tổng kết &amp; Đánh giá
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="page-header">
+            <span class="badge badge-success">Kết thúc hành trình</span>
+            <h1 class="page-title">Tổng kết &amp; Tự đánh giá</h1>
+            <p class="page-subtitle">Nhìn lại hành trình học tập 6 tuần của môn lập trình nâng cao — những kỹ năng đạt được, điểm mạnh và định hướng phát triển tiếp theo.</p>
+        </header>
+
+        <!-- Hero Card -->
+        <section>
+            <div class="summary-hero">
+                <div class="hero-avatar-wrap">
+                    <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn">
+                </div>
+                <h2 class="hero-name">Nguyễn Thanh Tuấn</h2>
+                <p class="hero-info">MSSV: 25021993 &nbsp;|&nbsp; Ngành: Khoa học máy tính &nbsp;|&nbsp; Trường: Đại học Công nghệ — ĐH Quốc gia Hà Nội (VNU-UET)</p>
+                <p class="hero-info" style="margin-top:0.25rem;">Môn học: Lập trình nâng cao &nbsp;|&nbsp; Năm học: 2025–2026</p>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span class="stat-num">6</span>
+                        <div class="stat-label">Bài thực hành</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">6</span>
+                        <div class="stat-label">Tuần học</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">12+</span>
+                        <div class="stat-label">Kỹ năng mới</div>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">30+</span>
+                        <div class="stat-label">Ảnh minh chứng</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Overview -->
+        <section class="glass-card">
+            <h3 class="section-title">📚 Tổng quan các Bài thực hành</h3>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <a href="project1.html" class="project-card-summary">
+                    <div class="pcs-num">📁</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 1</div>
+                        <h3 class="pcs-title">Bài 1: Quản lý Tập tin &amp; Thư mục</h3>
+                        <p class="pcs-desc">Thiết lập cấu trúc thư mục khoa học trên Windows; thực hành tạo, đổi tên, sao chép, di chuyển, xóa &amp; khôi phục tệp.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">File Explorer</span>
+                            <span class="pcs-skill">Naming Convention</span>
+                            <span class="pcs-skill">Recycle Bin</span>
+                            <span class="pcs-skill">Shift+Delete</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="project2.html" class="project-card-summary">
+                    <div class="pcs-num">🔍</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 2</div>
+                        <h3 class="pcs-title">Bài 2: Tìm kiếm &amp; Đánh giá Thông tin Học thuật</h3>
+                        <p class="pcs-desc">Thu thập 10 tài liệu từ Google Scholar, IEEE, ACM; đánh giá độ tin cậy và lập danh mục tham khảo chuẩn Harvard.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">Google Scholar</span>
+                            <span class="pcs-skill">IEEE Xplore</span>
+                            <span class="pcs-skill">Harvard Citation</span>
+                            <span class="pcs-skill">Source Evaluation</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="project3.html" class="project-card-summary">
+                    <div class="pcs-num">💬</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 3</div>
+                        <h3 class="pcs-title">Bài 3: Kỹ năng Viết Prompt Hiệu Quả</h3>
+                        <p class="pcs-desc">So sánh 3 cấp độ Prompt trên 3 tác vụ; đúc kết công thức C.R.E.A.T.E và kỹ thuật Role-prompting, CoT, Few-shot.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">Role-Prompting</span>
+                            <span class="pcs-skill">Chain-of-Thought</span>
+                            <span class="pcs-skill">Few-Shot</span>
+                            <span class="pcs-skill">C.R.E.A.T.E</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="project4.html" class="project-card-summary">
+                    <div class="pcs-num">🤝</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 4</div>
+                        <h3 class="pcs-title">Bài 4: Hợp tác &amp; Làm việc Nhóm Trực tuyến</h3>
+                        <p class="pcs-desc">Ứng dụng Google Workspace (Docs, Slides, Sheets, Drive) để cộng tác theo thời gian thực và quản lý dự án nhóm.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">Google Docs</span>
+                            <span class="pcs-skill">Google Slides</span>
+                            <span class="pcs-skill">Shared Drive</span>
+                            <span class="pcs-skill">Suggesting Mode</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="project5.html" class="project-card-summary">
+                    <div class="pcs-num">🎨</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 5</div>
+                        <h3 class="pcs-title">Bài 5: Sáng tạo Nội dung Số với AI</h3>
+                        <p class="pcs-desc">Thiết kế infographic "Bảo vệ Môi trường" bằng cách kết hợp ChatGPT, DALL·E và Canva AI trong quy trình sáng tạo 3 giai đoạn.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">ChatGPT</span>
+                            <span class="pcs-skill">DALL·E</span>
+                            <span class="pcs-skill">Canva AI</span>
+                            <span class="pcs-skill">Infographic Design</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="project6.html" class="project-card-summary">
+                    <div class="pcs-num">🛡️</div>
+                    <div class="pcs-body">
+                        <div class="pcs-badge">Tuần 6</div>
+                        <h3 class="pcs-title">Bài 6: Sử dụng AI có Trách nhiệm &amp; Đạo đức</h3>
+                        <p class="pcs-desc">Nghiên cứu chính sách AI đại học, thực hành có nhật ký minh bạch, phân tích ranh giới gian lận và xây dựng 6 nguyên tắc cá nhân.</p>
+                        <div class="pcs-skills">
+                            <span class="pcs-skill">AI Ethics</span>
+                            <span class="pcs-skill">APA 7th Citation</span>
+                            <span class="pcs-skill">Academic Integrity</span>
+                            <span class="pcs-skill">Fact-checking</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Skill Progress -->
+        <section class="grid-2">
+            <div class="glass-card">
+                <h3 class="section-title">📈 Mức độ kỹ năng tự đánh giá</h3>
+                <div style="margin-top:0.5rem;">
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Quản lý tệp &amp; hệ thống</span><span class="skill-bar-score">90%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:90%;"></div></div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Tìm kiếm &amp; đánh giá học thuật</span><span class="skill-bar-score">85%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:85%;"></div></div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Kỹ thuật viết Prompt AI</span><span class="skill-bar-score">88%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:88%;"></div></div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Công cụ cộng tác trực tuyến</span><span class="skill-bar-score">80%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:80%;"></div></div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Sáng tạo nội dung số</span><span class="skill-bar-score">75%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:75%;"></div></div>
+                    </div>
+                    <div class="skill-bar-item">
+                        <div class="skill-bar-header"><span class="skill-bar-label">Đạo đức &amp; tư duy phản biện AI</span><span class="skill-bar-score">92%</span></div>
+                        <div class="skill-bar-track"><div class="skill-bar-fill" style="width:92%;"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="section-title">🏆 Tự đánh giá theo barem</h3>
+                <div style="margin-top:0.5rem;">
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Đủ nội dung &amp; cấu trúc</div>
+                        <div class="eval-note">6 bài thực hành đầy đủ, có đề mục rõ ràng theo yêu cầu.</div>
+                        <div class="eval-grade grade-a">A+</div>
+                    </div>
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Hình ảnh minh chứng</div>
+                        <div class="eval-note">30+ ảnh chụp màn hình thực tế từ tất cả các bài.</div>
+                        <div class="eval-grade grade-a">A</div>
+                    </div>
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Phân tích &amp; nhận xét</div>
+                        <div class="eval-note">Có bảng so sánh, đánh giá ưu/nhược, bài học rút ra.</div>
+                        <div class="eval-grade grade-a">A</div>
+                    </div>
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Tính sáng tạo &amp; trình bày</div>
+                        <div class="eval-note">Portfolio web tương tác, responsive, dual theme.</div>
+                        <div class="eval-grade grade-a">A+</div>
+                    </div>
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Tính liên kết &amp; nhất quán</div>
+                        <div class="eval-note">Design system thống nhất xuyên suốt tất cả các trang.</div>
+                        <div class="eval-grade grade-a">A</div>
+                    </div>
+                    <div class="self-eval-row">
+                        <div class="eval-criterion">Kỹ năng kỹ thuật thực hiện</div>
+                        <div class="eval-note">HTML/CSS/JS thuần, glassmorphism, animations, lightbox.</div>
+                        <div class="eval-grade grade-a">A+</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reflections -->
+        <section class="glass-card">
+            <h3 class="section-title">💭 Suy ngẫm về hành trình học tập</h3>
+            <div style="display:flex;flex-direction:column;gap:1rem;">
+                <div class="reflection-card">
+                    <div class="reflection-icon">🌱</div>
+                    <div class="reflection-body">
+                        <h4>Điều ấn tượng nhất: Sức mạnh của việc kết hợp các công cụ</h4>
+                        <p>Bài học lớn nhất của tôi là không có một công cụ đơn lẻ nào là "siêu năng lực". ChatGPT giỏi viết nội dung nhưng cần DALL·E cho hình ảnh, Canva AI cho thiết kế, Google Drive cho cộng tác — chính sự <em>kết hợp thông minh</em> của các công cụ mới tạo ra sức mạnh thực sự trong công việc và học tập.</p>
+                    </div>
+                </div>
+                <div class="reflection-card">
+                    <div class="reflection-icon">🔑</div>
+                    <div class="reflection-body">
+                        <h4>Phát hiện quan trọng: Câu hỏi mới là kỹ năng cốt lõi của thời đại AI</h4>
+                        <p>Nghịch lý thú vị nhất tôi nhận ra: trong kỷ nguyên AI, kỹ năng quan trọng nhất không phải là <em>biết câu trả lời</em> mà là <em>biết đặt câu hỏi đúng</em>. Prompt Engineering chính là biểu hiện rõ nhất của kỹ năng tư duy phản biện và khả năng phân tích vấn đề — những thứ mà AI không thể dạy hộ.</p>
+                    </div>
+                </div>
+                <div class="reflection-card">
+                    <div class="reflection-icon">🎯</div>
+                    <div class="reflection-body">
+                        <h4>Thay đổi quan trọng trong tư duy: Từ người dùng → người kiến trúc sư</h4>
+                        <p>Trước khóa học, tôi chỉ là người tiêu thụ công nghệ. Sau 6 tuần, tôi bắt đầu có tư duy của một kiến trúc sư hệ thống: biết <em>thiết kế quy trình làm việc</em>, chọn đúng công cụ cho đúng mục đích, và quan trọng nhất là nhận thức được giới hạn &amp; rủi ro đạo đức của từng công cụ mình sử dụng.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Next Steps -->
+        <section class="glass-card">
+            <h3 class="section-title">🚀 Định hướng phát triển tiếp theo</h3>
+            <div class="grid-3">
+                <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-top:3px solid #38bdf8;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">💻</div>
+                    <h4 style="color:var(--text-primary);font-size:0.95rem;margin-bottom:0.5rem;">Kỹ năng kỹ thuật</h4>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:0.3rem;">
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Học Python &amp; lập trình cơ bản.</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Tìm hiểu sâu hơn về Machine Learning.</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Thực hành với GitHub &amp; Git Workflow.</li>
+                    </ul>
+                </div>
+                <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-top:3px solid #34d399;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">🤖</div>
+                    <h4 style="color:var(--text-primary);font-size:0.95rem;margin-bottom:0.5rem;">Kỹ năng AI &amp; Dữ liệu</h4>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:0.3rem;">
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Nâng cao kỹ thuật Prompt Engineering.</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Khám phá AI API (OpenAI, Gemini API).</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Phân tích dữ liệu với pandas, matplotlib.</li>
+                    </ul>
+                </div>
+                <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-top:3px solid #fbbf24;">
+                    <div style="font-size:1.5rem;margin-bottom:0.5rem;">🌟</div>
+                    <h4 style="color:var(--text-primary);font-size:0.95rem;margin-bottom:0.5rem;">Kỹ năng mềm &amp; nghề</h4>
+                    <ul style="list-style:none;display:flex;flex-direction:column;gap:0.3rem;">
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Tham gia các dự án open source nhỏ.</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Xây dựng portfolio cá nhân đầy đủ hơn.</li>
+                        <li style="font-size:0.82rem;color:var(--text-secondary);">→ Theo dõi xu hướng AI Ethics liên tục.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Thank You -->
+        <section>
+            <div style="text-align:center;padding:3rem 2rem;background:var(--card-bg);border:1px solid var(--card-border);border-radius:1.5rem;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 0%,rgba(14,165,233,0.07) 0%,transparent 70%);pointer-events:none;"></div>
+                <div style="font-size:3rem;margin-bottom:1rem;">🎓</div>
+                <h2 style="font-size:1.75rem;background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:0.75rem;">Cảm ơn quý thầy cô đã xem Portfolio!</h2>
+                <p style="color:var(--text-secondary);max-width:600px;margin:0 auto 1.5rem;line-height:1.7;">
+                    Portfolio này được xây dựng bằng <strong style="color:var(--text-primary);">HTML, CSS và Vanilla JavaScript</strong> — không sử dụng framework hay thư viện UI bên ngoài — như một cách để thể hiện nỗ lực học tập và áp dụng kỹ năng công nghệ của bản thân.
+                </p>
+                <div style="display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;">
+                    <a href="index.html" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        Về trang chủ
+                    </a>
+                    <a href="project1.html" class="btn btn-primary">
+                        Xem lại từ đầu
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

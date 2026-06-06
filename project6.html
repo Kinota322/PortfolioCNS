@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 6: Sử dụng AI có Trách nhiệm | Nguyễn Thanh Tuấn</title>
+    <meta name="description" content="Báo cáo nghiên cứu và thực hành sử dụng Trí tuệ nhân tạo có trách nhiệm và đạo đức trong học thuật - Nguyễn Thanh Tuấn">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .principle-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.9rem;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .principle-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 0 0 0 0;
+        }
+        .principle-card:hover {
+            border-color: var(--card-hover-border);
+            transform: translateX(6px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .principle-num {
+            width: 42px; height: 42px; flex-shrink: 0;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: white;
+            box-shadow: 0 0 10px var(--accent-glow);
+        }
+        .principle-content h4 { color: var(--text-primary); font-size: 1rem; margin-bottom: 0.35rem; }
+        .principle-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.55; }
+        .policy-compare-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .policy-compare-table th, .policy-compare-table td { padding: 0.85rem 1rem; border: 1px solid var(--card-border); }
+        .policy-compare-table th { background: var(--bg-secondary); color: var(--text-primary); font-weight: 600; text-align: left; }
+        .policy-compare-table td { color: var(--text-secondary); vertical-align: top; }
+        .policy-compare-table tr:hover td { background: rgba(255,255,255,0.02); color: var(--text-primary); }
+        .highlight-cell { color: var(--accent-primary) !important; font-weight: 600; }
+        .ethical-scale {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        .scale-side {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+        }
+        .scale-side.left { border-left: 3px solid #34d399; }
+        .scale-side.right { border-left: 3px solid #f87171; }
+        .scale-vs {
+            font-size: 1.5rem; font-weight: 900;
+            font-family: var(--font-heading);
+            color: var(--text-muted);
+            text-align: center;
+        }
+        .scale-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .scale-title.ok { color: #34d399; }
+        .scale-title.bad { color: #f87171; }
+        .scale-list { list-style: none; display: flex; flex-direction: column; gap: 0.4rem; }
+        .scale-list li { font-size: 0.82rem; color: var(--text-secondary); display: flex; gap: 0.4rem; }
+        .apa-citation {
+            background: rgba(14,165,233,0.05);
+            border: 1px solid rgba(14,165,233,0.2);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            font-family: Consolas, monospace;
+            font-size: 0.83rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .interaction-log {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .log-bubble {
+            padding: 0.9rem 1.1rem;
+            border-radius: 0.75rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            max-width: 85%;
+        }
+        .log-bubble.user {
+            background: rgba(2, 132, 199, 0.1);
+            border: 1px solid rgba(2, 132, 199, 0.25);
+            color: var(--text-primary);
+            align-self: flex-end;
+            border-radius: 0.75rem 0.75rem 0.1rem 0.75rem;
+        }
+        .log-bubble.ai {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: var(--text-primary);
+            align-self: flex-start;
+            border-radius: 0.75rem 0.75rem 0.75rem 0.1rem;
+        }
+        .log-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.3rem; font-weight: 600; text-transform: uppercase; }
+        @media (max-width: 768px) {
+            .ethical-scale { grid-template-columns: 1fr; }
+            .scale-vs { display: none; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <h3 class="mobile-title">Tuấn's Portfolio</h3>
+        <button class="menu-hamburger" id="hamburger-btn" aria-label="Mở menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn" class="sidebar-avatar">
+            <h3 class="sidebar-title">Nguyễn Thanh Tuấn</h3>
+            <span class="sidebar-subtitle">Sinh viên CNTT</span>
+            <span style="font-size:0.75rem;color:var(--accent-primary);margin-top:0.25rem;font-weight:bold;font-family:var(--font-heading);">MSSV: 25021993</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Giới thiệu bản thân
+            </a>
+            <a href="project1.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 1: Quản lý tệp &amp; thư mục
+            </a>
+            <a href="project2.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 2: Tìm kiếm học thuật
+            </a>
+            <a href="project3.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 3: Viết Prompt hiệu quả
+            </a>
+            <a href="project4.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 4: Hợp tác trực tuyến
+            </a>
+            <a href="project5.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 5: Sáng tạo nội dung số
+            </a>
+            <a href="project6.html" class="menu-item active">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 6: AI có trách nhiệm
+            </a>
+            <a href="summary.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Tổng kết &amp; Đánh giá
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="page-header">
+            <span class="badge badge-danger">Nhiệm vụ số 6</span>
+            <h1 class="page-title">Sử dụng AI có Trách nhiệm &amp; Đạo đức</h1>
+            <p class="page-subtitle">Nghiên cứu chính sách trường đại học về AI, thực hành với nhiệm vụ học tập thực tế, phân tích vấn đề đạo đức và xây dựng bộ nguyên tắc cá nhân.</p>
+        </header>
+
+        <!-- Policy Research Section -->
+        <section class="glass-card">
+            <h3 class="section-title">🏛️ Nghiên cứu chính sách sử dụng AI của Trường Đại học</h3>
+            <p style="margin-bottom:1.5rem;color:var(--text-secondary);">Phân tích và so sánh chi tiết chính sách về Trí tuệ nhân tạo của <strong style="color:var(--text-primary);">Đại học Bách khoa Hà Nội</strong> với các trường đại học khác tại Việt Nam:</p>
+
+            <div class="tab-container">
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="policy-hust">Chính sách ĐHBKHN</button>
+                    <button class="tab-btn" data-tab="policy-compare">So sánh các trường</button>
+                    <button class="tab-btn" data-tab="policy-opinion">Nhận định cá nhân</button>
+                </div>
+
+                <div class="tab-content active" id="policy-hust">
+                    <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;">
+                        <div class="principle-card">
+                            <div class="principle-num">✓</div>
+                            <div class="principle-content">
+                                <h4>Sự thừa nhận &amp; Khuyến khích sử dụng</h4>
+                                <p>Nhà trường công nhận AI (ChatGPT, Claude, Copilot) là <em>công cụ hỗ trợ học tập</em> hợp lệ. Sinh viên được khuyến khích khai thác AI để brainstorming, tìm kiếm tài liệu gợi ý hoặc sửa lỗi lập trình/ngữ pháp <strong>nếu sử dụng đúng cách.</strong></p>
+                            </div>
+                        </div>
+                        <div class="principle-card">
+                            <div class="principle-num">📋</div>
+                            <div class="principle-content">
+                                <h4>Quy định về Tính minh bạch (Transparency)</h4>
+                                <p>Bắt buộc sinh viên phải <strong>khai báo và trích dẫn rõ ràng</strong> khi có sự hỗ trợ của AI trong bất kỳ sản phẩm học thuật nào (bài tập lớn, đồ án, luận văn, bài báo khoa học). Phụ lục prompt là bắt buộc.</p>
+                            </div>
+                        </div>
+                        <div class="principle-card">
+                            <div class="principle-num">🚫</div>
+                            <div class="principle-content">
+                                <h4>Hành vi bị Nghiêm cấm</h4>
+                                <p>Nghiêm cấm <strong>sao chép nguyên văn (copy-paste)</strong> đầu ra của AI và nộp dưới danh nghĩa bài làm tự thân. Hành vi này xếp vào nhóm <em>"gian lận học thuật"</em> và bị xử lý kỷ luật theo Quy chế đào tạo hiện hành.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="policy-compare">
+                    <div class="table-container" style="margin-top:1rem;">
+                        <table class="policy-compare-table">
+                            <thead>
+                                <tr>
+                                    <th>Tiêu chí so sánh</th>
+                                    <th>ĐH Bách khoa Hà Nội</th>
+                                    <th>ĐH Quốc gia TP.HCM</th>
+                                    <th>ĐH RMIT Việt Nam</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Mức độ cởi mở</strong></td>
+                                    <td>Khuyến khích có kiểm soát &amp; minh bạch.</td>
+                                    <td>Thận trọng, chủ yếu bài thực hành CN.</td>
+                                    <td class="highlight-cell">Rất cởi mở, có AI Framework chi tiết cho từng cấp độ môn học.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Quy định trích dẫn</strong></td>
+                                    <td class="highlight-cell">Yêu cầu ghi rõ công cụ, mục đích và phụ lục prompt.</td>
+                                    <td>Khai báo chung trong danh mục tài liệu tham khảo.</td>
+                                    <td>Chuẩn APA 7th / Harvard cập nhật riêng cho AI.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Biện pháp kiểm soát</strong></td>
+                                    <td>Turnitin AI Detector + vấn đáp trực tiếp.</td>
+                                    <td>Công cụ rà quét nội bộ + đánh giá của GV.</td>
+                                    <td>Turnitin AI + thay đổi hình thức đánh giá định kỳ.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Phạm vi áp dụng</strong></td>
+                                    <td>Toàn bộ sản phẩm học thuật.</td>
+                                    <td>Chủ yếu bài tập thực hành.</td>
+                                    <td class="highlight-cell">Phân cấp theo từng loại môn học và cấp độ.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="policy-opinion">
+                    <div style="margin-top:1rem;display:flex;flex-direction:column;gap:1rem;">
+                        <blockquote style="border-left:4px solid var(--accent-primary);padding:1rem 1.5rem;background:var(--bg-secondary);border-radius:0 0.75rem 0.75rem 0;font-style:italic;color:var(--text-secondary);">
+                            "Chính sách của ĐHBKHN mang tính thực tiễn cao, không 'cấm đoán cực đoan' mà chọn cách 'quản lý và định hướng'. Điều này giúp sinh viên không bị tụt hậu về mặt công nghệ, đồng thời giữ vững được liêm chính học thuật."
+                        </blockquote>
+                        <div class="grid-2">
+                            <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.2);border-radius:0.75rem;padding:1.25rem;">
+                                <h4 style="color:#34d399;margin-bottom:0.5rem;">✅ Điểm mạnh của chính sách</h4>
+                                <ul style="list-style:none;display:flex;flex-direction:column;gap:0.35rem;">
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Không ngăn cản sinh viên tiếp cận công nghệ mới.</li>
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Dạy kỹ năng sử dụng AI đúng cách thay vì cấm cản.</li>
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Cơ chế kiểm tra đa lớp (phần mềm + vấn đáp) đảm bảo độ tin cậy.</li>
+                                </ul>
+                            </div>
+                            <div style="background:rgba(245,158,11,0.07);border:1px solid rgba(245,158,11,0.2);border-radius:0.75rem;padding:1.25rem;">
+                                <h4 style="color:#fbbf24;margin-bottom:0.5rem;">⚠️ Điểm cần hoàn thiện</h4>
+                                <ul style="list-style:none;display:flex;flex-direction:column;gap:0.35rem;">
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Ranh giới "AI hỗ trợ" vs "AI viết hộ" cần tiêu chí định lượng rõ hơn.</li>
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Cần hướng dẫn cụ thể theo từng loại môn học và đồ án.</li>
+                                    <li style="font-size:0.85rem;color:var(--text-secondary);">→ Cập nhật định kỳ khi các mô hình AI mới xuất hiện.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Task with Log -->
+        <section class="glass-card">
+            <h3 class="section-title">💬 Nhật ký tương tác với AI — Nhiệm vụ thực tế</h3>
+            <p style="margin-bottom:1rem;color:var(--text-secondary);">Nhiệm vụ được chọn: Viết bài luận về <em>"Tác động của chuyển đổi số đối với doanh nghiệp vừa và nhỏ (SMEs) tại Việt Nam"</em>.</p>
+
+            <h4 style="color:var(--text-primary);margin-bottom:0.75rem;font-size:0.95rem;">Lượt tương tác 1: Lên khung sườn (Brainstorming)</h4>
+            <div class="interaction-log">
+                <div>
+                    <div class="log-label">👤 Sinh viên (Prompt)</div>
+                    <div class="log-bubble user">
+                        "Hãy đóng vai là một chuyên gia kinh tế. Tôi cần viết một bài luận 1000 từ về 'Tác động của chuyển đổi số đối với doanh nghiệp vừa và nhỏ (SMEs) tại Việt Nam'. Hãy gợi ý cho tôi một dàn ý chi tiết, logic, gồm 4 phần chính kèm theo các luận điểm cốt lõi."
+                    </div>
+                </div>
+                <div>
+                    <div class="log-label">🤖 AI (Output tóm tắt)</div>
+                    <div class="log-bubble ai">
+                        <strong>DÀN Ý CHI TIẾT BÀI LUẬN</strong><br>
+                        Chủ đề: Tác động của chuyển đổi số đối với SMEs tại Việt Nam | Dung lượng: 1000 từ | Góc nhìn: Chuyên gia kinh tế<br><br>
+                        <strong>I. Mở đầu:</strong> Bối cảnh kinh tế số, tại sao SMEs cần chú ý...<br>
+                        <strong>II. Tác động tích cực:</strong> Tiếp cận thị trường, tối ưu vận hành, nâng cao năng lực...<br>
+                        <strong>III. Thách thức:</strong> Chi phí đầu tư, nhân lực, bảo mật dữ liệu...<br>
+                        <strong>IV. Kết luận &amp; Khuyến nghị:</strong> Chính sách hỗ trợ, lộ trình triển khai...
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1.5rem;background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;">
+                <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">🔍 Cách đánh giá, chỉnh sửa &amp; tích hợp đầu ra AI</h4>
+                <div style="display:flex;flex-direction:column;gap:0.6rem;">
+                    <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="color:#38bdf8;font-weight:700;flex-shrink:0;">Đánh giá:</span>
+                        <p style="font-size:0.87rem;color:var(--text-secondary);">Khung dàn ý logic và bao quát. Tuy nhiên các luận điểm còn mang tính lý thuyết, chưa cập nhật số liệu thực tế Việt Nam 2025–2026 và thiếu ví dụ doanh nghiệp cụ thể.</p>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="color:#fbbf24;font-weight:700;flex-shrink:0;">Chỉnh sửa:</span>
+                        <p style="font-size:0.87rem;color:var(--text-secondary);">Giữ lại bộ khung của AI nhưng lược bỏ phần lý thuyết rườm rà. Tự tìm kiếm và bổ sung số liệu từ các báo cáo chính thống để đưa vào bài làm.</p>
+                    </div>
+                    <div style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="color:#34d399;font-weight:700;flex-shrink:0;">Tích hợp:</span>
+                        <p style="font-size:0.87rem;color:var(--text-secondary);">Tự viết <strong>100% nội dung chi tiết</strong> dựa trên dàn ý đã hiệu chỉnh. Đầu ra của AI chỉ là "chiếc la bàn định hướng tư duy", hoàn toàn không sao chép nguyên văn câu từ của AI.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+                <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">📖 Trích dẫn AI minh bạch (Chuẩn APA 7th cho AI)</h4>
+                <div class="apa-citation">
+                    <span style="color:#64748b;">// Cách trích dẫn việc sử dụng AI theo chuẩn APA 7th (phiên bản điều chỉnh cho AI):</span><br><br>
+                    OpenAI. (2026). <em>ChatGPT</em> (Phiên bản GPT-4o) [Mô hình ngôn ngữ lớn]. Hỗ trợ xây dựng cấu trúc dàn ý bài luận về chuyển đổi số SMEs ngày 15/05/2026. Phản hồi thu được từ mã nguồn prompt cá nhân.
+                </div>
+            </div>
+        </section>
+
+        <!-- Ethical Analysis -->
+        <section class="glass-card">
+            <h3 class="section-title">⚖️ Phân tích vấn đề Đạo đức AI trong Học thuật</h3>
+            <div style="display:flex;flex-direction:column;gap:1.5rem;">
+                <div>
+                    <h4 style="color:var(--text-primary);margin-bottom:1rem;">Ranh giới giữa Hỗ trợ hợp lý và Gian lận học thuật</h4>
+                    <div class="ethical-scale">
+                        <div class="scale-side left">
+                            <div class="scale-title ok">✅ Hỗ trợ HỢP LÝ</div>
+                            <ul class="scale-list">
+                                <li><span>→</span> Dùng AI giải thích khái niệm khó, làm rõ thuật ngữ.</li>
+                                <li><span>→</span> Tìm lỗi sai trong code, gợi ý cách sửa.</li>
+                                <li><span>→</span> Gợi ý cấu trúc/dàn ý cho bài viết.</li>
+                                <li><span>→</span> Brainstorming ý tưởng ban đầu.</li>
+                                <li><span>→</span> Kiểm tra ngữ pháp và văn phong sau khi đã viết xong.</li>
+                            </ul>
+                        </div>
+                        <div class="scale-vs">VS</div>
+                        <div class="scale-side right">
+                            <div class="scale-title bad">❌ GIAN LẬN học thuật</div>
+                            <ul class="scale-list">
+                                <li><span>→</span> AI viết hộ từ đầu đến cuối bài luận/báo cáo.</li>
+                                <li><span>→</span> Để AI giải hộ bài tập rồi sao chép lại nguyên văn.</li>
+                                <li><span>→</span> Không khai báo việc sử dụng AI với giảng viên.</li>
+                                <li><span>→</span> Biến tri thức nhân tạo thành sản phẩm "cá nhân" giả tạo.</li>
+                                <li><span>→</span> Không xác thực thông tin do AI cung cấp trước khi nộp.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;">
+                        <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">📚 Vấn đề Quyền sở hữu trí tuệ</h4>
+                        <p style="font-size:0.87rem;color:var(--text-secondary);">AI được huấn luyện từ hàng tỷ tài liệu có bản quyền. Khi AI tạo ra câu trả lời, nó không tự động dẫn nguồn. Lạm dụng AI mà không kiểm tra nguồn gốc có thể dẫn đến <em>"đạo văn gián tiếp"</em>. Thiết lập quy chuẩn trích dẫn AI rõ ràng là bắt buộc.</p>
+                    </div>
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;">
+                        <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">🧠 Tác động đến quá trình học tập</h4>
+                        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+                            <p style="font-size:0.85rem;color:#34d399;font-weight:600;">Tích cực:</p>
+                            <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:-0.25rem;">Tăng tốc học, cá nhân hóa lộ trình, rèn kỹ năng đặt câu hỏi phản biện.</p>
+                            <p style="font-size:0.85rem;color:#f87171;font-weight:600;margin-top:0.25rem;">Nguy cơ:</p>
+                            <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:-0.25rem;">Hội chứng "lười tư duy", mất khả năng viết độc lập, "ảo tưởng tri thức" — biết copy-paste nhưng không hiểu thực sự.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Principles -->
+        <section class="glass-card">
+            <h3 class="section-title">📜 Bộ 6 Nguyên tắc Cá nhân — Sử dụng AI có Trách nhiệm</h3>
+            <p style="margin-bottom:1.5rem;color:var(--text-secondary);">Đây là bộ nguyên tắc tôi tự xây dựng và cam kết tuân thủ trong suốt quá trình học tập:</p>
+            <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                <div class="principle-card">
+                    <div class="principle-num">1</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Chủ quyền Tư duy</h4>
+                        <p>Tôi là người chịu trách nhiệm chính cho sản phẩm học thuật của mình. AI chỉ là người trợ lý, <strong>không phải là tác giả</strong>. Mọi quyết định cuối cùng đều do tôi đưa ra và chịu trách nhiệm.</p>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-num">2</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Minh bạch Tuyệt đối</h4>
+                        <p>Luôn khai báo thành thật về việc sử dụng AI: <strong>công cụ gì, hỗ trợ phần nào, và các câu lệnh (prompts) đã dùng</strong> — ghi rõ trong phần phụ lục của bài làm.</p>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-num">3</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Xác thực Thông tin (Fact-check)</h4>
+                        <p>Không bao giờ tin tưởng hoàn toàn vào các số liệu, nguồn dẫn do AI cung cấp. <strong>Mọi thông tin từ AI đều phải đối chiếu lại</strong> với tài liệu khoa học hoặc nguồn chính thống.</p>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-num">4</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Nói không với Sao chép</h4>
+                        <p>Không sao chép nguyên văn đoạn văn do AI tạo ra để nộp bài. <strong>Mọi ý tưởng từ AI phải được diễn đạt lại (paraphrase)</strong> bằng ngôn ngữ, tư duy và góc nhìn của chính bản thân.</p>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-num">5</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Bảo mật Dữ liệu</h4>
+                        <p>Không tải lên công cụ AI công cộng những <strong>tài liệu nội bộ, thông tin cá nhân</strong> của giảng viên, bạn học hoặc dữ liệu nghiên cứu chưa công bố của nhà trường.</p>
+                    </div>
+                </div>
+                <div class="principle-card">
+                    <div class="principle-num">6</div>
+                    <div class="principle-content">
+                        <h4>Nguyên tắc Phát triển Kỹ năng bền vững</h4>
+                        <p>Chỉ sử dụng AI <strong>sau khi đã tự suy nghĩ và cố gắng tìm giải pháp</strong>. Không dùng AI để đi đường tắt nhằm né tránh rèn luyện kỹ năng cốt lõi: đọc, viết, tính toán, tư duy phản biện.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evidence -->
+        <section class="glass-card">
+            <h3 class="section-title">📸 Hình ảnh minh chứng</h3>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="assets/images/Bai_tap_tuan_6_image1.png" alt="Báo cáo AI có trách nhiệm">
+                    <div class="gallery-caption">Infographic đề xuất "Sử dụng AI có Trách nhiệm trong Học thuật"</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/img_4.png" alt="Chính sách AI đại học">
+                    <div class="gallery-caption">Tra cứu chính sách AI của các trường đại học</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+            <a href="project5.html" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Bài 5: Sáng tạo nội dung số
+            </a>
+            <a href="summary.html" class="btn btn-primary">
+                Tổng kết &amp; Đánh giá
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+        </div>
+
+    </main>
+</div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

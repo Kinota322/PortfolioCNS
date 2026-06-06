@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 2: Tìm kiếm & Đánh giá | Nguyễn Thanh Tuấn</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        
+        <!-- Mobile Header Bar -->
+        <header class="mobile-header">
+            <h3 class="mobile-title">Tuấn's Portfolio</h3>
+            <button class="menu-hamburger" id="hamburger-btn" aria-label="Mở menu">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn" class="sidebar-avatar">
+                <h3 class="sidebar-title">Nguyễn Thanh Tuấn</h3>
+                <span class="sidebar-subtitle">Sinh viên CNTT</span>
+                <span style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 0.25rem; font-weight: bold; font-family: var(--font-heading);">MSSV: 25021993</span>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="index.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                    Giới thiệu bản thân
+                </a>
+                <a href="project1.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 1: Quản lý tệp & thư mục
+                </a>
+                <a href="project2.html" class="menu-item active">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 2: Tìm kiếm học thuật
+                </a>
+                <a href="project3.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 3: Viết Prompt hiệu quả
+                </a>
+                <a href="project4.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 4: Hợp tác trực tuyến
+                </a>
+                <a href="project5.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 5: Sáng tạo nội dung số
+                </a>
+                <a href="project6.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                    Bài 6: AI có trách nhiệm
+                </a>
+                <a href="summary.html" class="menu-item">
+                    <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    Tổng kết & Đánh giá
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Header -->
+            <header class="page-header">
+                <span class="badge badge-info">Nhiệm vụ số 2</span>
+                <h1 class="page-title">Tìm kiếm & Đánh giá Thông tin Học thuật</h1>
+                <p class="page-subtitle">Xây dựng chiến lược nghiên cứu, khai thác tối đa các toán tử tìm kiếm nâng cao để thu thập và đánh giá độ tin cậy của tài liệu khoa học.</p>
+            </header>
+
+            <!-- Research Context -->
+            <section class="glass-card">
+                <h3 class="section-title">Chủ đề Nghiên cứu</h3>
+                <h4 style="color: var(--accent-primary); margin-bottom: 1rem; font-size: 1.25rem;">Ảnh hưởng của công cụ Trí tuệ nhân tạo (Generative AI như ChatGPT, GitHub Copilot) đến quá trình học tập và tính trung thực học thuật của sinh viên ngành Công nghệ thông tin.</h4>
+                <p style="margin-bottom: 1rem;">
+                    <strong>Lý do chọn chủ đề:</strong> Đây là vấn đề mang tính thời sự cao trong năm 2026, ảnh hưởng trực tiếp đến phương pháp học tập, thi cử và việc rèn luyện tư duy logic của sinh viên IT trước những thay đổi của môi trường giáo dục đại học.
+                </p>
+                <div style="background: rgba(14, 165, 233, 0.03); border: 1px dashed var(--card-border); padding: 1.25rem; border-radius: 0.75rem;">
+                    <h4 style="margin-bottom: 0.5rem; font-size: 0.95rem;">Chiến lược tìm kiếm nâng cao (Ví dụ cụ thể)</h4>
+                    <p style="font-family: monospace; font-size: 0.85rem; color: var(--accent-primary); background: rgba(0,0,0,0.1); padding: 0.5rem; border-radius: 0.25rem; margin-bottom: 0.5rem;">
+                        "Generative AI" AND "computer science education" site:edu filetype:pdf
+                    </p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                        Toán tử trên giúp lọc chính xác các bài báo cáo định dạng PDF được lưu trữ trên tên miền giáo dục <code>.edu</code> của Mỹ, loại bỏ các bài blog thảo luận không chính thức.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Interactive Search & Table -->
+            <section class="glass-card">
+                <h3 class="section-title">Bảng đánh giá & Phân cấp độ tin cậy</h3>
+                <p style="margin-bottom: 1.5rem;">Sử dụng thanh tìm kiếm hoặc bộ lọc độ tin cậy để tra cứu nhanh thông tin của 10 tài liệu đã thu thập:</p>
+                
+                <!-- Filters Bar -->
+                <div class="table-filter-bar">
+                    <input type="text" id="table-search" class="search-input" placeholder="Tìm kiếm tác giả, năm, nhà xuất bản, từ khóa...">
+                    <select id="table-filter-rating" class="select-filter">
+                        <option value="all">Tất cả Độ tin cậy</option>
+                        <option value="Cao">Độ tin cậy: Cao</option>
+                        <option value="Trung bình">Độ tin cậy: Trung bình</option>
+                        <option value="Thấp">Độ tin cậy: Thấp</option>
+                    </select>
+                </div>
+
+                <!-- Table Container -->
+                <div class="table-container">
+                    <table class="searchable-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 50px;">STT</th>
+                                <th>Tài liệu (Tác giả, Năm)</th>
+                                <th>Cơ quan xuất bản</th>
+                                <th>Phương pháp nghiên cứu</th>
+                                <th>Trích dẫn / Tác động</th>
+                                <th>Tính cập nhật</th>
+                                <th>Độ tin cậy</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>Becker et al. (2025)</strong></td>
+                                <td>ACM SIGCSE 2025</td>
+                                <td>Khảo sát định lượng diện rộng (1000+ sinh viên)</td>
+                                <td>Cao (đại diện cho cộng đồng giáo dục CNTT)</td>
+                                <td>2025</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>Chen & Lin (2026)</strong></td>
+                                <td>Computers & Education (Tạp chí Q1)</td>
+                                <td>Thử nghiệm có đối chứng (A/B testing)</td>
+                                <td>Cao (chỉ số khoa học rất cao)</td>
+                                <td>2026</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>Nguyen, T. (2025)</strong></td>
+                                <td>IEEE Transactions on Education</td>
+                                <td>Mô hình hóa & kiểm thử công cụ rà quét đạo văn</td>
+                                <td>Cao (quy trình phản biện khắt khe)</td>
+                                <td>2025</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>Smith & Jones (2026)</strong></td>
+                                <td>Journal of Engineering Education</td>
+                                <td>Phỏng vấn định tính chuyên sâu</td>
+                                <td>Khá (góc nhìn từ nhà quản lý)</td>
+                                <td>2026</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>Lee, H. (2025)</strong></td>
+                                <td>Local University Tech Journal</td>
+                                <td>Thống kê điểm số học tập cục bộ</td>
+                                <td>Thấp (phạm vi hẹp, nội bộ trường)</td>
+                                <td>2025</td>
+                                <td><span class="badge badge-warning">Trung bình</span></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>Educause (2026)</strong></td>
+                                <td>Tổ chức Educause (Horizon Report)</td>
+                                <td>Báo cáo xu hướng & dữ liệu lớn vĩ mô</td>
+                                <td>Cao (tài liệu định hướng giáo dục ĐH)</td>
+                                <td>Đầu 2026</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><strong>Stanford Univ. (2025)</strong></td>
+                                <td>Cổng thông tin ĐH Stanford (.edu)</td>
+                                <td>Văn bản chính sách hành chính học đường</td>
+                                <td>Đang áp dụng rộng rãi</td>
+                                <td>2025</td>
+                                <td><span class="badge badge-success">Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td><strong>Chronicle of Higher Ed (2025)</strong></td>
+                                <td>Báo chí chuyên ngành giáo dục đại học</td>
+                                <td>Phỏng vấn thị trường thực tế nhà tuyển dụng</td>
+                                <td>Trung bình (kiểm chứng thông tin chặt chẽ)</td>
+                                <td>Cuối 2025</td>
+                                <td><span class="badge badge-info">Trung bình - Cao</span></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td><strong>Reddit (2026)</strong></td>
+                                <td>Mạng xã hội diễn đàn mở (r/csMajors)</td>
+                                <td>Không có phương pháp khoa học (chia sẻ cảm tính)</td>
+                                <td>Không có (không có giá trị trích dẫn khoa học)</td>
+                                <td>Tháng 3/2026</td>
+                                <td><span class="badge badge-danger">Thấp</span></td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td><strong>EdSurge (2026)</strong></td>
+                                <td>Trang tin tư duy giáo dục số</td>
+                                <td>Tổng hợp tin tức báo chí công nghệ</td>
+                                <td>Trung bình (phù hợp lấy bối cảnh xã hội)</td>
+                                <td>Tháng 3/2026</td>
+                                <td><span class="badge badge-warning">Trung bình</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Bibliography (Harvard style) -->
+            <section class="glass-card">
+                <h3 class="section-title">Danh mục Tài liệu Tham khảo (Harvard Style)</h3>
+                <ul style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem;">
+                    <li>
+                        Becker, B. A. và cộng sự. (2025) 'Programming in the Age of Generative AI: A Survey of Undergraduate Computer Science Students', trong <em>Proceedings of the 56th ACM Technical Symposium on Computer Science Education (SIGCSE 2025)</em>, tr. 112-118.
+                    </li>
+                    <li>
+                        Chen, Y. và Lin, M. (2026) 'The impact of AI coding assistants on novice programmers' learning outcomes', <em>Computers & Education</em>, 205, 104889.
+                    </li>
+                    <li>
+                        Educause (2026) <em>2026 EDUCAUSE Horizon Report: Teaching and Learning Edition</em>. Boulder, CO: EDUCAUSE.
+                    </li>
+                    <li>
+                        Nguyen, T. (2025) 'Evaluating LLM-based code generation plagiarism detection tools in higher education', <em>IEEE Transactions on Education</em>, 68(2), tr. 210-225.
+                    </li>
+                    <li>
+                        Stanford University (2025) <em>Academic Integrity and Generative AI Policies</em>. Có tại: <a href="https://communitystandards.stanford.edu/" target="_blank" rel="noopener">https://communitystandards.stanford.edu/</a> (Truy cập: 22 Tháng Ba 2026).
+                    </li>
+                </ul>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

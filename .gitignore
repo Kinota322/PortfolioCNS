@@ -1,0 +1,14 @@
+# Git
+.git/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor folders
+.vscode/
+.idea/
+
+# Node (nếu dùng sau này)
+node_modules/

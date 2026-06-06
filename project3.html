@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 3: Viết Prompt Hiệu Quả | Nguyễn Thanh Tuấn</title>
+    <meta name="description" content="Báo cáo kỹ năng viết Prompt tối ưu hóa Mô hình Ngôn ngữ Lớn trong học tập - Nguyễn Thanh Tuấn, MSSV 25021993">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .prompt-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+        .prompt-level {
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            border: 1px solid var(--card-border);
+        }
+        .prompt-level.basic { background: rgba(239,68,68,0.05); border-color: rgba(239,68,68,0.2); }
+        .prompt-level.improved { background: rgba(245,158,11,0.05); border-color: rgba(245,158,11,0.2); }
+        .prompt-level.advanced { background: rgba(16,185,129,0.05); border-color: rgba(16,185,129,0.2); }
+        .level-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.3rem 0.75rem; border-radius: 9999px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+            width: fit-content;
+        }
+        .level-badge.basic { background: rgba(239,68,68,0.15); color: #f87171; }
+        .level-badge.improved { background: rgba(245,158,11,0.15); color: #fbbf24; }
+        .level-badge.advanced { background: rgba(16,185,129,0.15); color: #34d399; }
+        .prompt-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid var(--card-border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.6;
+        }
+        .eval-row {
+            display: flex; gap: 0.5rem; align-items: flex-start;
+            font-size: 0.85rem; color: var(--text-secondary);
+        }
+        .eval-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+        .create-formula-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .create-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            display: flex; flex-direction: column; gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .create-card:hover {
+            border-color: var(--accent-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px var(--accent-glow);
+        }
+        .create-letter {
+            font-size: 2rem; font-weight: 900;
+            font-family: var(--font-heading);
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+        .create-term { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+        .create-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; }
+        .evidence-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .eval-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.85rem; }
+        .eval-table th, .eval-table td { padding: 0.7rem 0.9rem; border: 1px solid var(--card-border); }
+        .eval-table th { background: var(--bg-secondary); color: var(--text-primary); font-weight: 600; }
+        .eval-table td { color: var(--text-secondary); }
+        .eval-table tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+        .star-rating { color: #fbbf24; }
+        @media (max-width: 900px) {
+            .prompt-comparison, .create-formula-grid, .evidence-gallery { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <h3 class="mobile-title">Tuấn's Portfolio</h3>
+        <button class="menu-hamburger" id="hamburger-btn" aria-label="Mở menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn" class="sidebar-avatar">
+            <h3 class="sidebar-title">Nguyễn Thanh Tuấn</h3>
+            <span class="sidebar-subtitle">Sinh viên CNTT</span>
+            <span style="font-size:0.75rem;color:var(--accent-primary);margin-top:0.25rem;font-weight:bold;font-family:var(--font-heading);">MSSV: 25021993</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Giới thiệu bản thân
+            </a>
+            <a href="project1.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 1: Quản lý tệp &amp; thư mục
+            </a>
+            <a href="project2.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 2: Tìm kiếm học thuật
+            </a>
+            <a href="project3.html" class="menu-item active">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 3: Viết Prompt hiệu quả
+            </a>
+            <a href="project4.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 4: Hợp tác trực tuyến
+            </a>
+            <a href="project5.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 5: Sáng tạo nội dung số
+            </a>
+            <a href="project6.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 6: AI có trách nhiệm
+            </a>
+            <a href="summary.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Tổng kết &amp; Đánh giá
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="page-header">
+            <span class="badge badge-info">Nhiệm vụ số 3</span>
+            <h1 class="page-title">Kỹ năng Viết Prompt Hiệu Quả</h1>
+            <p class="page-subtitle">Tối ưu hóa tương tác với Mô hình Ngôn ngữ Lớn (LLM) trong học tập thông qua kỹ thuật viết Prompt 3 cấp độ và công thức C.R.E.A.T.E.</p>
+        </header>
+
+        <!-- Overview -->
+        <section class="grid-2">
+            <div class="glass-card">
+                <h3 class="section-title">📋 Tổng quan nhiệm vụ</h3>
+                <p style="margin-bottom:1rem;">Để đánh giá toàn diện khả năng của LLMs, tôi đã chọn <strong>3 tác vụ cốt lõi</strong> đại diện cho các cấp độ tư duy từ thấp đến cao trong học tập:</p>
+                <ul style="display:flex;flex-direction:column;gap:0.75rem;list-style:none;">
+                    <li style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:1.1rem;flex-shrink:0;">01</span>
+                        <div><strong style="color:var(--text-primary);">Tóm tắt tài liệu học thuật</strong><br><span style="font-size:0.85rem;">Chủ đề: Công nghệ Blockchain — Rút trích thông tin cốt lõi có cấu trúc.</span></div>
+                    </li>
+                    <li style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:1.1rem;flex-shrink:0;">02</span>
+                        <div><strong style="color:var(--text-primary);">Giải thích khái niệm phức tạp</strong><br><span style="font-size:0.85rem;">Chủ đề: Lỗ đen vũ trụ — Hạ bậc ngôn ngữ cho đúng đối tượng.</span></div>
+                    </li>
+                    <li style="display:flex;gap:0.75rem;align-items:flex-start;">
+                        <span style="background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;font-size:1.1rem;flex-shrink:0;">03</span>
+                        <div><strong style="color:var(--text-primary);">Tạo bộ câu hỏi ôn tập</strong><br><span style="font-size:0.85rem;">Chủ đề: Chiến tranh thế giới thứ 2 — Phân bổ nhiều tầng nhận thức.</span></div>
+                    </li>
+                </ul>
+            </div>
+            <div class="glass-card">
+                <h3 class="section-title">⚙️ Kỹ thuật Prompt đã áp dụng</h3>
+                <div style="display:flex;flex-direction:column;gap:0.75rem;">
+                    <div style="background:var(--bg-secondary);border-radius:0.5rem;padding:0.9rem 1rem;border-left:3px solid #38bdf8;">
+                        <strong style="color:#38bdf8;">Role-Prompting</strong>
+                        <p style="font-size:0.85rem;margin-top:0.25rem;">Gán vai trò cụ thể cho AI (Giảng viên, Nhà vật lý, Chuyên gia sử học) để thu hẹp không gian vector đầu ra.</p>
+                    </div>
+                    <div style="background:var(--bg-secondary);border-radius:0.5rem;padding:0.9rem 1rem;border-left:3px solid #34d399;">
+                        <strong style="color:#34d399;">Chain-of-Thought (CoT)</strong>
+                        <p style="font-size:0.85rem;margin-top:0.25rem;">Yêu cầu AI "suy nghĩ theo từng bước" để giảm thiểu bỏ sót ý và tăng độ chính xác lập luận.</p>
+                    </div>
+                    <div style="background:var(--bg-secondary);border-radius:0.5rem;padding:0.9rem 1rem;border-left:3px solid #fbbf24;">
+                        <strong style="color:#fbbf24;">Few-Shot Examples</strong>
+                        <p style="font-size:0.85rem;margin-top:0.25rem;">Cung cấp 1–2 ví dụ mẫu về giọng điệu và cấu trúc mong muốn để AI bắt chước chính xác nhất.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Task Tabs -->
+        <section class="glass-card">
+            <h3 class="section-title">🔬 So sánh 3 cấp độ Prompt</h3>
+            <div class="tab-container">
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="task1">Tác vụ 1: Tóm tắt Blockchain</button>
+                    <button class="tab-btn" data-tab="task2">Tác vụ 2: Giải thích Lỗ đen</button>
+                    <button class="tab-btn" data-tab="task3">Tác vụ 3: Câu hỏi ôn tập CTTG2</button>
+                </div>
+
+                <!-- Task 1 -->
+                <div class="tab-content active" id="task1">
+                    <div class="prompt-comparison">
+                        <div class="prompt-level basic">
+                            <span class="level-badge basic">⚠ Cơ bản</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cơ bản</h4>
+                            <div class="prompt-box">"Tóm tắt về công nghệ Blockchain là gì."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📖</span><span>Đọc như Wikipedia, khá nhàm chán.</span></div>
+                                <div class="eval-row"><span class="eval-icon">🎯</span><span>Đúng nhưng lan man, nhiều thuật ngữ lạ.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span>Chỉ phù hợp để <em>tra cứu nhanh</em>.</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level improved">
+                            <span class="level-badge improved">✨ Cải tiến</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cải tiến</h4>
+                            <div class="prompt-box">"Hãy tóm tắt định nghĩa về công nghệ Blockchain. Trình bày dưới dạng gạch đầu dòng, giới hạn trong 150 từ, nêu rõ 3 đặc điểm chính."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📖</span><span>Khúc chiết, dễ nhìn nhờ gạch đầu dòng.</span></div>
+                                <div class="eval-row"><span class="eval-icon">🎯</span><span>Trúng đích, tuân thủ đúng giới hạn 150 từ.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span>Phù hợp để <em>ôn thi lướt ý</em>.</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level advanced">
+                            <span class="level-badge advanced">🚀 Nâng cao</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Nâng cao (Role + CoT)</h4>
+                            <div class="prompt-box">"Đóng vai: Giảng viên CNTT dạy người mới bắt đầu. Bước 1: Câu định nghĩa tl;dr dưới 20 từ. Bước 2: 3 từ khóa cốt lõi + giải thích. Bước 3: 1 ví dụ ứng dụng phổ biến."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📖</span><span>Xuất sắc. Có điểm nhấn (tl;dr), từ khóa dễ nhớ.</span></div>
+                                <div class="eval-row"><span class="eval-icon">🎯</span><span>Rất sâu sắc, logic chặt chẽ.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span><em>Tối ưu nhất</em> để thực sự hiểu bản chất.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="eval-table" style="margin-top:1.5rem;">
+                        <thead><tr><th>Tiêu chí</th><th>Cơ bản</th><th>Cải tiến</th><th>Nâng cao</th></tr></thead>
+                        <tbody>
+                            <tr><td>Độ chính xác</td><td>Đúng nhưng lan man</td><td>Trúng đích, đúng giới hạn</td><td><span class="star-rating">★★★★★</span> Rất sâu sắc</td></tr>
+                            <tr><td>Trải nghiệm đọc</td><td>Nhàm chán như từ điển</td><td>Khúc chiết, dễ đọc</td><td><span class="star-rating">★★★★★</span> Xuất sắc</td></tr>
+                            <tr><td>Phù hợp mục đích</td><td>Tra cứu nhanh</td><td>Ôn thi lướt ý</td><td><span class="star-rating">★★★★★</span> Hiểu bản chất sâu</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Task 2 -->
+                <div class="tab-content" id="task2">
+                    <div class="prompt-comparison">
+                        <div class="prompt-level basic">
+                            <span class="level-badge basic">⚠ Cơ bản</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cơ bản</h4>
+                            <div class="prompt-box">"Giải thích hố đen vũ trụ là gì."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">🌡</span><span>Khô khan, đề cập chân trời sự kiện, điểm kỳ dị...</span></div>
+                                <div class="eval-row"><span class="eval-icon">👥</span><span>Dành cho sinh viên chuyên ngành.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span>Thiếu tính định hướng đối tượng.</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level improved">
+                            <span class="level-badge improved">✨ Cải tiến</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cải tiến</h4>
+                            <div class="prompt-box">"Hãy giải thích khái niệm hố đen vũ trụ. Đừng dùng ngôn ngữ khoa học phức tạp, hãy giải thích sao cho học sinh cấp 2 có thể hiểu được."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">🌡</span><span>Ngôn từ đơn giản hơn, nhưng vẫn mang tính lý thuyết.</span></div>
+                                <div class="eval-row"><span class="eval-icon">👥</span><span>Học sinh cấp 2 hiểu được khoảng 70%.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span>Tốt hơn nhưng AI vẫn tự biên tự diễn.</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level advanced">
+                            <span class="level-badge advanced">🚀 Nâng cao</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Nâng cao (Role + Few-Shot)</h4>
+                            <div class="prompt-box">"Đóng vai: Nhà vật lý dẫn chương trình Discovery cho trẻ em. Dùng phép so sánh với đồ vật quen thuộc. Ví dụ tone: 'Giống như nam châm khổng lồ hút sắt...' Cấu trúc: Mở bài thu hút → Ẩn dụ → Kết luận thú vị."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">🌡</span><span>Rất cuốn hút, có tính kể chuyện cao.</span></div>
+                                <div class="eval-row"><span class="eval-icon">👥</span><span>Trẻ em mường tượng rõ ràng nhờ phép ẩn dụ sinh động.</span></div>
+                                <div class="eval-row"><span class="eval-icon">💡</span><span>Kiểm soát hoàn toàn văn phong và tư duy của AI.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="eval-table" style="margin-top:1.5rem;">
+                        <thead><tr><th>Tiêu chí</th><th>Cơ bản</th><th>Cải tiến</th><th>Nâng cao</th></tr></thead>
+                        <tbody>
+                            <tr><td>Tính sinh động</td><td>Khô khan, hàn lâm</td><td>Đơn giản hơn, vẫn lý thuyết</td><td><span class="star-rating">★★★★★</span> Rất cuốn hút</td></tr>
+                            <tr><td>Sự phù hợp đối tượng</td><td>Sinh viên chuyên ngành</td><td>Học sinh cấp 2 (~70%)</td><td><span class="star-rating">★★★★★</span> Trẻ em cũng hiểu</td></tr>
+                            <tr><td>Kiểm soát đầu ra</td><td>Không kiểm soát</td><td>Hạn chế từ ngữ</td><td><span class="star-rating">★★★★★</span> Kiểm soát hoàn toàn</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Task 3 -->
+                <div class="tab-content" id="task3">
+                    <div class="prompt-comparison">
+                        <div class="prompt-level basic">
+                            <span class="level-badge basic">⚠ Cơ bản</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cơ bản</h4>
+                            <div class="prompt-box">"Tạo một vài câu hỏi ôn tập về Chiến tranh thế giới thứ 2."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📚</span><span>AI tự hỏi tự trả lời, câu hỏi tự luận ngẫu nhiên.</span></div>
+                                <div class="eval-row"><span class="eval-icon">🏆</span><span>Giá trị học tập: Thấp.</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level improved">
+                            <span class="level-badge improved">✨ Cải tiến</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Cải tiến</h4>
+                            <div class="prompt-box">"Tạo 5 câu hỏi trắc nghiệm (có 4 đáp án A,B,C,D) về Chiến tranh thế giới thứ 2. Yêu cầu cung cấp đáp án đúng ở cuối."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📚</span><span>Chỉ có trắc nghiệm, kiểm tra trí nhớ máy móc.</span></div>
+                                <div class="eval-row"><span class="eval-icon">🏆</span><span>Giá trị học tập: Trung bình (dùng test nhanh).</span></div>
+                            </div>
+                        </div>
+                        <div class="prompt-level advanced">
+                            <span class="level-badge advanced">🚀 Nâng cao</span>
+                            <h4 style="color:var(--text-primary);font-size:1rem;">Prompt Nâng cao (Role + Cấu trúc)</h4>
+                            <div class="prompt-box">"Đóng vai: Chuyên gia biên soạn đề thi Lịch sử. Tạo mini-test: 2 câu Nhận biết (trắc nghiệm) + 2 câu Thông hiểu (điền từ) + 1 câu Vận dụng (tự luận). Sau đó tạo phần ĐÁP ÁN & GIẢI THÍCH CHỮA BÀI riêng ở cuối."</div>
+                            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+                                <div class="eval-row"><span class="eval-icon">📚</span><span>Đánh giá nhiều tầng nhận thức (Bloom's Taxonomy).</span></div>
+                                <div class="eval-row"><span class="eval-icon">🏆</span><span>Giá trị học tập: Cao nhất. Biết tại sao mình sai.</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="eval-table" style="margin-top:1.5rem;">
+                        <thead><tr><th>Tiêu chí</th><th>Cơ bản</th><th>Cải tiến</th><th>Nâng cao</th></tr></thead>
+                        <tbody>
+                            <tr><td>Tính đa dạng câu hỏi</td><td>Ngẫu nhiên, không rõ dạng</td><td>Chỉ có trắc nghiệm</td><td><span class="star-rating">★★★★★</span> Nhiều dạng, nhiều tầng</td></tr>
+                            <tr><td>Có phần giải thích đáp án</td><td>❌ Không</td><td>Chỉ có đáp án đúng</td><td><span class="star-rating">★★★★★</span> Giải thích chi tiết</td></tr>
+                            <tr><td>Giá trị học tập</td><td>Thấp</td><td>Trung bình</td><td><span class="star-rating">★★★★★</span> Cao nhất</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Insight Analysis -->
+        <section class="glass-card">
+            <h3 class="section-title">🧠 Phân tích hiệu quả của Prompt</h3>
+            <div class="grid-2">
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-left:3px solid #f87171;">
+                        <h4 style="color:#f87171;margin-bottom:0.5rem;">🔴 Hiện tượng "Ảo giác" (Hallucination)</h4>
+                        <p style="font-size:0.88rem;color:var(--text-secondary);">Với prompt cơ bản, AI bị thiếu hụt bối cảnh (Context). Mô hình tính toán xác suất từ vựng chung chung nhất, dẫn đến văn bản nhạt nhòa, đôi khi sai lệch trọng tâm học tập.</p>
+                    </div>
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-left:3px solid #38bdf8;">
+                        <h4 style="color:#38bdf8;margin-bottom:0.5rem;">🔵 Sức mạnh của "Gán vai" (Role-Prompting)</h4>
+                        <p style="font-size:0.88rem;color:var(--text-secondary);">Gán vai trò là cách "thu hẹp không gian vector" của AI, ép nó chỉ truy xuất từ vựng, văn phong và kiến thức tương ứng với nhân vật đó, mang lại kết quả chuyên sâu hơn hẳn.</p>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1rem;">
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-left:3px solid #34d399;">
+                        <h4 style="color:#34d399;margin-bottom:0.5rem;">🟢 Tư duy từng bước (Chain-of-Thought)</h4>
+                        <p style="font-size:0.88rem;color:var(--text-secondary);">Yêu cầu AI "Suy nghĩ theo từng bước" giúp LLM có thời gian "suy luận" tuần tự, giảm thiểu tối đa việc bỏ sót ý so với yêu cầu tóm tắt tất cả cùng một lúc.</p>
+                    </div>
+                    <div style="background:var(--bg-secondary);border-radius:0.75rem;padding:1.25rem;border-left:3px solid #fbbf24;">
+                        <h4 style="color:#fbbf24;margin-bottom:0.5rem;">🟡 Ràng buộc Định dạng là Tiên quyết</h4>
+                        <p style="font-size:0.88rem;color:var(--text-secondary);">Quy định rõ "khuôn mẫu" đầu ra (gạch đầu dòng, giới hạn từ, bảng đáp án riêng) giúp tiết kiệm thời gian chỉnh sửa (edit) cho người học đáng kể.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- C.R.E.A.T.E Formula -->
+        <section class="glass-card">
+            <h3 class="section-title">🎯 Công thức C.R.E.A.T.E — Viết Prompt Hiệu Quả</h3>
+            <p style="margin-bottom:1.5rem;color:var(--text-secondary);">Đúc kết từ quá trình thử nghiệm thực tế, đây là 6 nguyên tắc cốt lõi để viết prompt tối ưu trong học tập:</p>
+            <div class="create-formula-grid">
+                <div class="create-card">
+                    <div class="create-letter">C</div>
+                    <div class="create-term">Context — Bối cảnh</div>
+                    <div class="create-desc">Luôn cung cấp hoàn cảnh cụ thể. Thay vì "Giải thích X", hãy dùng <em>"Tôi là sinh viên năm nhất đang chuẩn bị thi cuối kỳ, hãy giải thích X..."</em></div>
+                </div>
+                <div class="create-card">
+                    <div class="create-letter">R</div>
+                    <div class="create-term">Role — Đóng vai</div>
+                    <div class="create-desc">Xác định rõ bạn muốn AI là ai: Gia sư nghiêm khắc, Chuyên gia đầu ngành, hay Bạn học cùng tiến.</div>
+                </div>
+                <div class="create-card">
+                    <div class="create-letter">E</div>
+                    <div class="create-term">Explicit Constraints — Ràng buộc</div>
+                    <div class="create-desc">Dùng câu lệnh phủ định hoặc giới hạn: <em>"Giới hạn trong 200 từ"</em>, <em>"KHÔNG dùng thuật ngữ tiếng Anh"</em>.</div>
+                </div>
+                <div class="create-card">
+                    <div class="create-letter">A</div>
+                    <div class="create-term">Action — Nhiệm vụ trọng tâm</div>
+                    <div class="create-desc">Dùng động từ mạnh và rõ: <em>"So sánh"</em>, <em>"Phân tích"</em>, <em>"Tóm tắt"</em> thay vì từ mơ hồ <em>"Nói về"</em>.</div>
+                </div>
+                <div class="create-card">
+                    <div class="create-letter">T</div>
+                    <div class="create-term">Tone &amp; Format — Giọng điệu</div>
+                    <div class="create-desc">Yêu cầu đầu ra dưới dạng bảng biểu, Markdown, gạch đầu dòng hoặc sơ đồ tư duy để dễ lưu trữ kiến thức.</div>
+                </div>
+                <div class="create-card">
+                    <div class="create-letter">E</div>
+                    <div class="create-term">Examples — Ví dụ minh họa</div>
+                    <div class="create-desc">Kỹ thuật Few-shot prompting: Cung cấp 1–2 ví dụ mẫu về câu trả lời mong muốn để AI bắt chước chuẩn xác nhất.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Evidence Screenshots -->
+        <section class="glass-card">
+            <h3 class="section-title">📸 Hình ảnh minh chứng thực hành</h3>
+            <p style="margin-bottom:1.5rem;color:var(--text-secondary);">Ảnh chụp màn hình các phiên tương tác với Gemini/ChatGPT trong quá trình thực hành. Nhấn để phóng to:</p>
+            <div class="evidence-gallery">
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image1.png" alt="Prompt cơ bản - Blockchain">
+                    <div class="gallery-caption">Thử nghiệm Prompt cơ bản — Blockchain</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image2.png" alt="Prompt cải tiến - Blockchain">
+                    <div class="gallery-caption">Prompt cải tiến — Kết quả cấu trúc hơn</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image3.png" alt="Prompt nâng cao - Blockchain">
+                    <div class="gallery-caption">Prompt Nâng cao (Role + CoT) — Blockchain</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image4.png" alt="Prompt lỗ đen vũ trụ">
+                    <div class="gallery-caption">Tác vụ 2 — Giải thích Lỗ đen vũ trụ</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image5.png" alt="Few-shot prompting">
+                    <div class="gallery-caption">Áp dụng Few-shot Prompting</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image6.png" alt="Tạo câu hỏi ôn tập">
+                    <div class="gallery-caption">Tác vụ 3 — Bộ câu hỏi CTTG2 đa tầng</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image7.png" alt="Kết quả câu hỏi đa dạng">
+                    <div class="gallery-caption">Kết quả: Câu hỏi đa dạng dạng thức</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image8.png" alt="Phần đáp án và giải thích">
+                    <div class="gallery-caption">Phần ĐÁP ÁN &amp; GIẢI THÍCH CHỮA BÀI</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="assets/images/bai_tap_tuan_3_image9.png" alt="So sánh tổng hợp">
+                    <div class="gallery-caption">Tổng hợp so sánh 3 cấp độ Prompt</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation Buttons -->
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+            <a href="project2.html" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Bài 2: Tìm kiếm học thuật
+            </a>
+            <a href="project4.html" class="btn btn-primary">
+                Bài 4: Hợp tác trực tuyến
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+        </div>
+
+    </main>
+</div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

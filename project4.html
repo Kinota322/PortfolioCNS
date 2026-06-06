@@ -1,0 +1,404 @@
+﻿<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 4: Hợp tác Trực tuyến | Nguyễn Thanh Tuấn</title>
+    <meta name="description" content="Báo cáo kỹ năng hợp tác và làm việc nhóm trực tuyến với các công cụ Google Workspace - Nguyễn Thanh Tuấn">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        .tool-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .tool-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tool-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.2), 0 0 15px var(--accent-glow); }
+        .tool-card:hover::before { opacity: 1; }
+        .tool-card.gdocs::before { background: linear-gradient(90deg, #4285f4, #34a853); }
+        .tool-card.gslides::before { background: linear-gradient(90deg, #fbbc05, #ea4335); }
+        .tool-card.gsheets::before { background: linear-gradient(90deg, #34a853, #0f9d58); }
+        .tool-card.drive::before { background: linear-gradient(90deg, #4285f4, #ea4335); }
+        .tool-icon {
+            width: 52px; height: 52px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+        }
+        .tool-icon.gdocs { background: rgba(66,133,244,0.15); }
+        .tool-icon.gslides { background: rgba(234,67,53,0.15); }
+        .tool-icon.gsheets { background: rgba(52,168,83,0.15); }
+        .tool-icon.drive { background: rgba(251,188,5,0.15); }
+        .tool-tag {
+            display: inline-flex; align-items: center;
+            padding: 0.2rem 0.6rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 9999px;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .step-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+        .step-item {
+            display: flex;
+            gap: 1.25rem;
+            align-items: flex-start;
+            position: relative;
+        }
+        .step-num {
+            width: 36px; height: 36px; flex-shrink: 0;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.85rem;
+            color: white;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+        .step-connector {
+            position: absolute;
+            left: 17px; top: 36px;
+            width: 2px; height: calc(100% - 36px);
+            background: var(--card-border);
+        }
+        .step-body { padding-bottom: 2rem; flex: 1; }
+        .step-body h4 { color: var(--text-primary); margin-bottom: 0.4rem; font-size: 1rem; }
+        .step-body p { font-size: 0.87rem; color: var(--text-secondary); }
+        .collab-image-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+            margin-top: 1rem;
+        }
+        .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+        .feature-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.87rem; color: var(--text-secondary); }
+        .feature-list li::before { content: '✓'; color: var(--accent-primary); font-weight: 700; flex-shrink: 0; }
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        .compare-box {
+            background: var(--bg-secondary);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+        }
+        @media (max-width: 768px) {
+            .collab-image-grid, .compare-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-container">
+
+    <!-- Mobile Header -->
+    <header class="mobile-header">
+        <h3 class="mobile-title">Tuấn's Portfolio</h3>
+        <button class="menu-hamburger" id="hamburger-btn" aria-label="Mở menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/images/avatar.png" alt="Nguyễn Thanh Tuấn" class="sidebar-avatar">
+            <h3 class="sidebar-title">Nguyễn Thanh Tuấn</h3>
+            <span class="sidebar-subtitle">Sinh viên CNTT</span>
+            <span style="font-size:0.75rem;color:var(--accent-primary);margin-top:0.25rem;font-weight:bold;font-family:var(--font-heading);">MSSV: 25021993</span>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="index.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                Giới thiệu bản thân
+            </a>
+            <a href="project1.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 1: Quản lý tệp &amp; thư mục
+            </a>
+            <a href="project2.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 2: Tìm kiếm học thuật
+            </a>
+            <a href="project3.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 3: Viết Prompt hiệu quả
+            </a>
+            <a href="project4.html" class="menu-item active">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 4: Hợp tác trực tuyến
+            </a>
+            <a href="project5.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 5: Sáng tạo nội dung số
+            </a>
+            <a href="project6.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+                Bài 6: AI có trách nhiệm
+            </a>
+            <a href="summary.html" class="menu-item">
+                <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                Tổng kết &amp; Đánh giá
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <header class="page-header">
+            <span class="badge badge-success">Nhiệm vụ số 4</span>
+            <h1 class="page-title">Hợp tác &amp; Làm việc nhóm Trực tuyến</h1>
+            <p class="page-subtitle">Ứng dụng bộ công cụ Google Workspace (Docs, Slides, Sheets, Drive) để cộng tác học thuật theo thời gian thực và quản lý dự án nhóm hiệu quả.</p>
+        </header>
+
+        <!-- Tool Cards -->
+        <section>
+            <h2 class="section-title">🛠️ Công cụ Google Workspace đã sử dụng</h2>
+            <div class="grid-2" style="gap:1.25rem;">
+                <div class="tool-card gdocs">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div class="tool-icon gdocs">📝</div>
+                        <div>
+                            <h3 style="font-size:1.1rem;color:var(--text-primary);">Google Docs</h3>
+                            <span class="tool-tag">Soạn thảo cộng tác</span>
+                        </div>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Chỉnh sửa đồng thời (real-time) nhiều người cùng một tài liệu.</li>
+                        <li>Chế độ Comment &amp; Suggestion giúp review không làm hỏng bản gốc.</li>
+                        <li>Lịch sử phiên bản (Version History) để hoàn tác bất kỳ thay đổi nào.</li>
+                        <li>Tích hợp Gemini AI để hỗ trợ viết lại, tóm tắt và kiểm tra văn phong.</li>
+                    </ul>
+                </div>
+                <div class="tool-card gslides">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div class="tool-icon gslides">🖥️</div>
+                        <div>
+                            <h3 style="font-size:1.1rem;color:var(--text-primary);">Google Slides</h3>
+                            <span class="tool-tag">Thuyết trình nhóm</span>
+                        </div>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Phân chia slide theo từng thành viên phụ trách cùng một presentation.</li>
+                        <li>Chế độ "Presenter view" với ghi chú riêng cho người thuyết trình.</li>
+                        <li>Xuất file .pptx hoặc PDF để nộp bài đúng định dạng giảng viên yêu cầu.</li>
+                        <li>Tính năng Q&amp;A và bình chọn trực tiếp trong buổi thuyết trình online.</li>
+                    </ul>
+                </div>
+                <div class="tool-card gsheets">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div class="tool-icon gsheets">📊</div>
+                        <div>
+                            <h3 style="font-size:1.1rem;color:var(--text-primary);">Google Sheets</h3>
+                            <span class="tool-tag">Quản lý dữ liệu nhóm</span>
+                        </div>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Theo dõi tiến độ công việc từng thành viên bằng bảng Kanban đơn giản.</li>
+                        <li>Tính điểm, thống kê khảo sát và vẽ biểu đồ tổng hợp số liệu.</li>
+                        <li>Dùng Form phản hồi liên kết trực tiếp với Sheet để thu thập dữ liệu tự động.</li>
+                        <li>Bảo vệ vùng dữ liệu quan trọng (Protected Ranges) để tránh chỉnh sửa nhầm.</li>
+                    </ul>
+                </div>
+                <div class="tool-card drive">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <div class="tool-icon drive">💾</div>
+                        <div>
+                            <h3 style="font-size:1.1rem;color:var(--text-primary);">Google Drive</h3>
+                            <span class="tool-tag">Kho lưu trữ chung</span>
+                        </div>
+                    </div>
+                    <ul class="feature-list">
+                        <li>Tổ chức cây thư mục theo cấu trúc dự án: <code>/NhomA/BaoCao/TaiLieu/</code>.</li>
+                        <li>Phân quyền truy cập linh hoạt: Viewer, Commenter, Editor theo vai trò.</li>
+                        <li>Chia sẻ link có thể hết hạn để bảo vệ tài liệu sau khi nộp bài.</li>
+                        <li>Tìm kiếm thông minh theo nội dung file (không chỉ tên file).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Collaboration Workflow -->
+        <section class="glass-card">
+            <h3 class="section-title">🔄 Quy trình hợp tác nhóm thực tế</h3>
+            <p style="margin-bottom:2rem;color:var(--text-secondary);">Quy trình 5 bước chuẩn hóa được nhóm áp dụng xuyên suốt dự án bài tập lớn:</p>
+            <div class="step-flow">
+                <div class="step-item" style="position:relative;">
+                    <div class="step-num">1</div>
+                    <div class="step-connector"></div>
+                    <div class="step-body">
+                        <h4>Khởi tạo &amp; Phân quyền trên Google Drive</h4>
+                        <p>Trưởng nhóm tạo Shared Drive chung, tổ chức cấu trúc thư mục chuẩn và phân quyền Editor/Viewer cho từng thành viên theo vai trò được giao trong dự án.</p>
+                    </div>
+                </div>
+                <div class="step-item" style="position:relative;">
+                    <div class="step-num">2</div>
+                    <div class="step-connector"></div>
+                    <div class="step-body">
+                        <h4>Lập kế hoạch &amp; Phân công trên Google Sheets</h4>
+                        <p>Tạo bảng phân công công việc với cột: Tên nhiệm vụ / Người phụ trách / Deadline / Trạng thái. Mỗi thành viên cập nhật trạng thái công việc hàng ngày.</p>
+                    </div>
+                </div>
+                <div class="step-item" style="position:relative;">
+                    <div class="step-num">3</div>
+                    <div class="step-connector"></div>
+                    <div class="step-body">
+                        <h4>Đồng thời soạn thảo trên Google Docs</h4>
+                        <p>Các thành viên viết phần của mình song song. Dùng chế độ "Suggesting" để đề xuất sửa đổi thay vì chỉnh sửa trực tiếp, giữ nguyên văn gốc cho đến khi được phê duyệt.</p>
+                    </div>
+                </div>
+                <div class="step-item" style="position:relative;">
+                    <div class="step-num">4</div>
+                    <div class="step-connector"></div>
+                    <div class="step-body">
+                        <h4>Tổng hợp &amp; thiết kế slide trên Google Slides</h4>
+                        <p>Mỗi thành viên chịu trách nhiệm thiết kế các slide tương ứng phần mình viết. Trưởng nhóm review tính đồng nhất về theme màu sắc và font chữ toàn bộ bài thuyết trình.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="step-body">
+                        <h4>Review cuối &amp; Nộp bài</h4>
+                        <p>Toàn nhóm tổ chức buổi review online qua Google Meet, dùng tính năng Comment để đánh dấu các điểm cần sửa. Sau khi hoàn chỉnh, export và nộp bài đúng hạn.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots -->
+        <section class="glass-card">
+            <h3 class="section-title">📸 Minh chứng thực hành</h3>
+            <div class="tab-container">
+                <div class="tab-nav">
+                    <button class="tab-btn active" data-tab="collab-docs">Google Docs</button>
+                    <button class="tab-btn" data-tab="collab-slides">Google Slides</button>
+                </div>
+                <div class="tab-content active" id="collab-docs">
+                    <p style="margin-bottom:1rem;color:var(--text-secondary);">Giao diện soạn thảo đồng thời trên Google Docs với nhiều người dùng:</p>
+                    <div class="collab-image-grid">
+                        <div class="gallery-item">
+                            <img src="assets/images/img.png" alt="Google Docs giao diện cộng tác">
+                            <div class="gallery-caption">Giao diện cộng tác — Nhiều con trỏ màu sắc khác nhau</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="assets/images/img_1.png" alt="Chế độ Comment và Suggestion">
+                            <div class="gallery-caption">Chế độ Suggesting — Đề xuất sửa đổi không phá bản gốc</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="collab-slides">
+                    <p style="margin-bottom:1rem;color:var(--text-secondary);">Giao diện thiết kế slide theo nhóm trên Google Slides:</p>
+                    <div class="collab-image-grid">
+                        <div class="gallery-item">
+                            <img src="assets/images/img_2.png" alt="Google Slides giao diện nhóm">
+                            <div class="gallery-caption">Google Slides — Thiết kế slide phân công theo thành viên</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img src="assets/images/img_3.png" alt="Google Slides Presenter View">
+                            <div class="gallery-caption">Presenter View — Ghi chú riêng trong lúc thuyết trình</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pros & Cons -->
+        <section class="glass-card">
+            <h3 class="section-title">⚖️ Đánh giá ưu &amp; nhược điểm</h3>
+            <div class="compare-grid">
+                <div class="compare-box" style="border-left:3px solid var(--success);">
+                    <h4 style="color:#34d399;margin-bottom:1rem;">✅ Ưu điểm nổi bật</h4>
+                    <ul class="feature-list">
+                        <li>Làm việc song song, không cần chờ đợi — tăng tốc độ hoàn thành.</li>
+                        <li>Tự động lưu liên tục, không bao giờ bị mất dữ liệu.</li>
+                        <li>Miễn phí hoàn toàn với tài khoản Google thông thường.</li>
+                        <li>Truy cập từ bất kỳ thiết bị nào: PC, máy tính bảng, điện thoại.</li>
+                        <li>Tích hợp AI (Gemini) giúp cải thiện chất lượng văn bản nhanh chóng.</li>
+                        <li>Lịch sử phiên bản đầy đủ — có thể quay về trạng thái cũ bất kỳ lúc nào.</li>
+                    </ul>
+                </div>
+                <div class="compare-box" style="border-left:3px solid var(--warning);">
+                    <h4 style="color:#fbbf24;margin-bottom:1rem;">⚠️ Hạn chế &amp; Thách thức</h4>
+                    <ul class="feature-list">
+                        <li>Cần kết nối internet ổn định — khó dùng ở vùng sóng kém.</li>
+                        <li>Tính năng định dạng nâng cao kém Microsoft Office (Track Changes phức tạp).</li>
+                        <li>Khi quá nhiều người chỉnh sửa cùng lúc, giao diện có thể bị giật lag.</li>
+                        <li>File lớn (nhiều hình ảnh, video) tải chậm hơn khi mở trực tuyến.</li>
+                        <li>Phần mềm soạn thảo mã (code) có hạn chế so với VS Code / IDE chuyên dụng.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reflection -->
+        <section class="glass-card">
+            <h3 class="section-title">💭 Bài học &amp; Nhận định cá nhân</h3>
+            <blockquote style="border-left:4px solid var(--accent-primary);padding:1rem 1.5rem;background:var(--bg-secondary);border-radius:0 0.75rem 0.75rem 0;font-style:italic;color:var(--text-secondary);margin-bottom:1.5rem;">
+                "Hợp tác trực tuyến không chỉ là vấn đề công nghệ mà còn là kỹ năng giao tiếp, phân quyền và tin tưởng lẫn nhau. Google Workspace chỉ là công cụ — chìa khóa là quy trình làm việc nhóm được thống nhất từ đầu."
+            </blockquote>
+            <div class="grid-2">
+                <div>
+                    <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">📌 Kỹ năng kỹ thuật đã học được:</h4>
+                    <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;">
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--accent-primary);">→</span> Thiết lập cấu trúc Shared Drive theo quy chuẩn dự án.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--accent-primary);">→</span> Sử dụng Suggesting Mode thay vì chỉnh sửa trực tiếp.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--accent-primary);">→</span> Protect Ranges trong Sheets để bảo vệ dữ liệu quan trọng.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--accent-primary);">→</span> Cài đặt quyền truy cập hết hạn sau ngày nộp bài.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="color:var(--text-primary);margin-bottom:0.75rem;">🎓 Kỹ năng mềm được trau dồi:</h4>
+                    <ul style="display:flex;flex-direction:column;gap:0.4rem;list-style:none;">
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--success);">→</span> Kỹ năng phân công và theo dõi tiến độ nhóm.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--success);">→</span> Giao tiếp bằng comment thay vì nhắn tin riêng lẻ.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--success);">→</span> Giải quyết xung đột nội dung (merge conflicts) khi cùng sửa.</li>
+                        <li style="font-size:0.87rem;color:var(--text-secondary);display:flex;gap:0.5rem;"><span style="color:var(--success);">→</span> Tôn trọng deadline và cập nhật tiến độ chủ động.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+            <a href="project3.html" class="btn btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                Bài 3: Viết Prompt hiệu quả
+            </a>
+            <a href="project5.html" class="btn btn-primary">
+                Bài 5: Sáng tạo nội dung số
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </a>
+        </div>
+
+    </main>
+</div>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
