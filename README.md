@@ -7,8 +7,7 @@
 
 ## 🌐 Xem trực tuyến
 
-👉 **[Mở Portfolio](https://nguyenthanhtuann.github.io/PortfolioCNS/)**  
-*(Thay `nguyenthanhtuann` bằng username GitHub của bạn)*
+👉 **[Mở Portfolio](https://Kinota322.github.io/PortfolioCNS/)**  
 
 ---
 
@@ -32,7 +31,6 @@
 - **HTML5** – Cấu trúc trang
 - **CSS3** – Giao diện (Vanilla CSS, glassmorphism, animations)
 - **JavaScript (ES6)** – Tương tác người dùng
-- **Font** – [Be Vietnam Pro](https://fonts.google.com/specimen/Be+Vietnam+Pro) (hỗ trợ tiếng Việt)
 
 ---
 
@@ -61,6 +59,8 @@ PortfolioCNS/
 ## 🚀 Chạy cục bộ
 
 Chỉ cần mở file `index.html` trên trình duyệt – không cần cài đặt gì thêm.
+## PDF 
+[Untitled design.pdf](https://github.com/user-attachments/files/28769083/Untitled.design.pdf)
 
 ---
 
